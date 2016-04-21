@@ -6,9 +6,14 @@ import cgi
 #the code below contained within the variable body is the html/css/javascript for creating the GUI part and functionality
 # behind the fridge monitoring app. We print this string below with critical values like the user list, and other things inserted
 # into the string using string formatting (find the %s !). YOU DO NOT NEED TO UNDERSTAND HOW THIS CODE WORKS, ONLY WHAT IT DOES:
+
 # On loading it creates a page that has field for selecting a user (to receive a message), a message field, a submit button, and a 
-# field to display received messages.  When Submit is pressed, a POST is sent to a message.py file which interacts with the database for
-# logging hte message.  Every 1 second, the code also runs a GET request on message.py to retrieve any messages associated with the user
+# field to display received messages.  
+
+#When Submit is pressed, a POST is sent to a message.py file which interacts with the database for
+# logging the message.  
+
+#Every 1 second, the code also runs a GET request on message.py to retrieve any messages associated with the user
 # It then displays these messages inside its maroon box at the bottom.
 body = '''<heading>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
@@ -16,6 +21,7 @@ body = '''<heading>
 <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+
 clearIt = function(){
     console.log("sending message");
     console.log($("#message").val());

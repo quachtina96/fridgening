@@ -2,11 +2,15 @@
 # logs and retrieves messages from db
 
 #the goal is to get server to communicate with the teensy over wifi
-#teensy should send get requests in order to obtain the messages sent within the last 1 minutes
-#teensy should send post requests in order to send periodic messages as well as broadcast!
+#teensy should send post requests in order to send periodic info such as
+    # "temp" in degrees F (float)
+    # "alert" when temp exceeds threshold (bit)
+    # "closed" when limit switch indicates closed fridge door (bit)
+    # "resistance" flex sensor readings (float)
+#fridgening.py should figure out the time--datetime?
+
 #when we send the response from the server,  it needs opening(`<html>`) and closing HTML tag (`</html>`) 
 #displaying the response: parse the html response for relevant text
-##do not show timestamp, "sender: message" one per line
 
 #key need: a way to distinguish between the teensy and the browser
 
@@ -19,19 +23,25 @@ print( "Content-type:text/html\r\n\r\n")
 
 
 #system specific variables:
-site = 'quacht'# site  name (your kerberos)
-users = {'spoop':'fam', 'yeah':'bage', 'naw':'bih'}  #replace with your own user list (eventually)
+site = 'fridgening'# site  name (your kerberos)
+users = {'brenda':'bae', 'tina':'bae', 'instructor':'pw'}  #replace with your own user list (eventually)
 
 
 method_type = get_method_type()
 form = cgi.FieldStorage() #get specified parameters!
 
 if method_type == 'POST':
-    teensy = form.getvalue('teensy')
+
+    #GENERAL CONSTRUCTOR FOR DATETIME OBJ = datetime.datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
+    #get current time: 
+    currTime = datetime.datetime.now() #currTime is a datetime object of the above format. 
+    date = str(currTime.date())
+    time = str(currTime.time())
+    temp = form.getvalue('temp')
     #define the variables sender, recipient, message for use in the query creation below
-    sender = form.getvalue('sender')
-    recipient = form.getvalue('recipient')
-    message = form.getvalue('message')
+    alert = form.getvalue('alert')
+    closed = form.getvalue('closed')
+    flex_reading = form.getvalue('resistance') #check with brenda about what to call this--perhaps ask if we can change the name of this param in db?
     #connect to database:
     cnx = _mysql.connect(user='student', passwd='6s08student',db='iesc') 
     #create a mySQL query and commit to database relevant information for logging message
